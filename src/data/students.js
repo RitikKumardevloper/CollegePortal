@@ -1,0 +1,42 @@
+export const students = [
+  {
+    id: 1,
+    name: "John Doe",
+    email: "john@college.edu",
+    program: "Computer Science",
+    year: "3",
+    status: "Active",
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    email: "jane@college.edu",
+    program: "Electrical Engineering",
+    year: "2",
+    status: "Active",
+  },
+  {
+    id: 3,
+    name: "Alex Johnson",
+    email: "alex@college.edu",
+    program: "Business Administration",
+    year: "4",
+    status: "Graduated",
+  },
+  {
+    id: 4,
+    name: "Sarah Williams",
+    email: "sarah@college.edu",
+    program: "Biology",
+    year: "1",
+    status: "Active",
+  },
+  {
+    id: 5,
+    name: "Michael Brown",
+    email: "michael@college.edu",
+    program: "Mathematics",
+    year: "3",
+    status: "Active",
+  },
+];
