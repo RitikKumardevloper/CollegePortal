@@ -30,7 +30,7 @@ export default function Dashboard() {
     datasets: [
       {
         label: "New Students",
-        data: [65, 80, 56, 55, 43, 81, 65, 80, 56, 55, 59,  43],
+        data: [65, 80, 56, 55, 43, 81, 65, 80, 56, 55, 59, 43],
         backgroundColor: "#3B82F6",
       },
     ],
