@@ -38,7 +38,7 @@ export default function Sidebar() {
       children: [
         { to: "/students/allstudents", label: "All Students" },
         { to: "/students/addstudents", label: "Add Students" },
-        { to: "/students/edittudent", label: "Edit Students" },
+        { to: "/students/editstudent", label: "Edit Students" },
         { to: "/students/aboutstudents", label: "About Student" },
         { to: "/students/studentattendance", label: "Student Attendance" },
       ],
@@ -64,15 +64,90 @@ export default function Sidebar() {
         { to: "/courses/aboutcourses", label: "About Courses" },
       ],
     },
-    { to: "/library", icon: <IoLibraryOutline />, label: "Library" },
-    { to: "/department", icon: <FiBriefcase />, label: "Department" },
-    { to: "/staff", icon: <FiUsers />, label: "Staff" },
-    { to: "/holiday", icon: <FiCalendar />, label: "Holiday" },
-    { to: "/fees", icon: <FiDollarSign />, label: "Fees" },
-    { to: "/class", icon: <FiBook />, label: "Class" },
-    { to: "/enquiry", icon: <FiFileText />, label: "Enquiry" },
-    { to: "/humanresources", icon: <FiBriefcase />, label: "Human Resources" },
-    { to: "/attendance", icon: <FiCheckSquare />, label: "Attendance" },
+    {
+      icon: <IoLibraryOutline />,
+      label: "Library",
+      children: [
+        { to: "/library/alllibraryassests", label: "AllLibararyAssets" },
+        { to: "/library/addlibraryassests", label: "AddLibararyAssets" },
+        { to: "/library/editlibraryassests", label: "editLibararyAssets" },
+        { to: "/library/bookstatus", label: "Bookstatus" },
+      ],
+    },
+    {
+      icon: <FiBriefcase />,
+      label: "Department",
+      children: [
+        { to: "/department/alldepartments", label: "AllDepartments" },
+        { to: "/department/adddepartments", label: "AddDepartments" },
+        { to: "/department/editdepartments", label: "editDepartments" },
+      ],
+    },
+    {
+      icon: <FiUsers />,
+      label: "Staff",
+      children: [
+        { to: "/staff/allstaff", label: "All Staff" },
+        { to: "/staff/addstaff", label: "Add Staff" },
+        { to: "/staff/editstaff", label: "Edit Staff" },
+        { to: "/staff/aboutstaff", label: "About Staff" },
+        { to: "/staff/staffattendance", label: "Staff Attendance" },
+      ],
+    },
+    {
+      icon: <FiDollarSign />,
+      label: "Fees",
+      children: [
+        { to: "/fees/allfees", label: "All Fees" },
+        { to: "/fees/addfees", label: "Add Fees" },
+        { to: "/fees/editfees", label: "Edit Fees" },
+        { to: "/fees/feesdiscount", label: "Fees Discount" },
+        { to: "/fees/feesrecipet", label: "Fees Recipet" },
+      ],
+    },
+    {
+      to: "",
+      icon: <FiBook />,
+      label: "Class",
+      children: [
+        { to: "/class/classlist", label: "ClassList" },
+        { to: "/class/classtimetable", label: "ClassTimeTable" },
+      ],
+    },
+    {
+      to: "",
+      icon: <FiFileText />,
+      label: "Enquiry",
+      children: [
+        { to: "/enquiry/allenquiry", label: "All Enquiry" },
+        { to: "/enquiry/enquirydetails", label: "Enquiry Details" },
+        { to: "/enquiry/enquirylist", label: "Enquiry List" },
+      ],
+    },
+    {
+      to: "/humanresources",
+      icon: <FiBriefcase />,
+      label: "Human Resources",
+      children: [
+        { to: "/humanresources/empleiesleavereq", label: "All Staff" },
+        { to: "/humanresources/addstaff", label: "Add Staff" },
+        { to: "/humanresources/editstaff", label: "Edit Staff" },
+        { to: "/humanresources/aboutstaff", label: "About Staff" },
+        { to: "/humanresources/staffattendance", label: "Staff Attendance" },
+      ],
+    },
+    {
+      to: "/attendance",
+      icon: <FiCheckSquare />,
+      label: "Attendance",
+      children: [
+        { to: "/students/allstaff", label: "All Staff" },
+        { to: "/students/addstaff", label: "Add Staff" },
+        { to: "/students/editstaff", label: "Edit Staff" },
+        { to: "/students/aboutstaff", label: "About Staff" },
+        { to: "/students/staffattendance", label: "Staff Attendance" },
+      ],
+    },
     { to: "/settings", icon: <FiSettings />, label: "Settings" },
   ];
 
