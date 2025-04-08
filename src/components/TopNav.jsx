@@ -1,5 +1,6 @@
 import { FiBell, FiSearch } from "react-icons/fi";
 import { Avatar } from "./Avatar";
+import { NavLink } from "react-router-dom";
 
 export default function TopNav() {
   return (
@@ -18,6 +19,22 @@ export default function TopNav() {
             <FiBell className="text-gray-600" />
             <span className="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
           </button>
+
+          <div className="flex items-center space-x-2">
+            <NavLink
+              to="/login"
+              className="px-4 py-2 rounded-md text-gray-600 hover:bg-gray-100 transition-colors"
+            >
+              Login
+            </NavLink>
+            <NavLink
+              to="/signup"
+              className="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700 transition-colors"
+            >
+              Sign Up
+            </NavLink>
+          </div>
+
           <div className="flex items-center space-x-2">
             <Avatar src="https://randomuser.me/api/portraits/men/1.jpg" />
             <span className="font-medium">Admin</span>
