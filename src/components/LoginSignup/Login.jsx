@@ -1,7 +1,48 @@
+import React, { useState } from "react";
 import { LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    password: "",
+    role: "student",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { username, password } = formData;
+
+    try {
+      const response = await fetch("http://localhost:5000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // optional if you're using cookies
+        body: JSON.stringify({ username, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Login Successful ✅");
+        navigate("/"); // 👈 redirect to root route
+      } else {
+        alert(data.message || "Invalid credentials ❌");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      alert("Server error ❌");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
@@ -10,7 +51,7 @@ const Login = () => {
             College Admin Login
           </h2>
         </div>
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
             <div>
               <label
@@ -26,7 +67,9 @@ const Login = () => {
                   name="username"
                   type="text"
                   required
-                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
             </div>
@@ -45,34 +88,36 @@ const Login = () => {
                   name="password"
                   type="password"
                   required
-                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
             </div>
           </div>
 
-          <div>
-            <label
-              htmlFor="role"
-              className="block text-sm font-medium text-gray-700"
-            >
+          {/* Role (Optional - can remove if not needed) */}
+          {/* <div>
+            <label htmlFor="role" className="block text-sm font-medium text-gray-700">
               Role
             </label>
             <select
               id="role"
               name="role"
-              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              value={formData.role}
+              onChange={handleChange}
+              className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md"
             >
               <option value="admin">Admin</option>
-              <option value="faculty">Faculty</option>
+              <option value="teacher">Teacher</option>
               <option value="student">Student</option>
             </select>
-          </div>
+          </div> */}
 
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 bg-indigo-600 text-white rounded-md"
             >
               Sign in
             </button>

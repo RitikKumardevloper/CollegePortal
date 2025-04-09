@@ -1,11 +1,48 @@
-import {
-  EnvelopeIcon,
-  LockClosedIcon,
-  UserCircleIcon,
-} from "@heroicons/react/24/outline";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { EnvelopeIcon, LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    role: "student",
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const { username, password, role } = formData;
+
+    try {
+      const response = await fetch("http://localhost:5000/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username, password, role }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Registered Successfully");
+        navigate("/login");
+      } else {
+        alert(data.message || "Registration Failed");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Server Error");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
@@ -14,15 +51,11 @@ const Signup = () => {
             Create Admin Account
           </h2>
         </div>
-        <form className="mt-8 space-y-6">
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
           <div className="rounded-md shadow-sm space-y-4">
+            {/* Username */}
             <div>
-              <label
-                htmlFor="username"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Username
-              </label>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
               <div className="mt-1 relative">
                 <UserCircleIcon className="h-5 w-5 text-gray-400 absolute top-3 left-3" />
                 <input
@@ -30,37 +63,16 @@ const Signup = () => {
                   name="username"
                   type="text"
                   required
-                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  value={formData.username}
+                  onChange={handleChange}
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
             </div>
 
+            {/* Password */}
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Email
-              </label>
-              <div className="mt-1 relative">
-                <EnvelopeIcon className="h-5 w-5 text-gray-400 absolute top-3 left-3" />
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  required
-                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Password
-              </label>
+              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
               <div className="mt-1 relative">
                 <LockClosedIcon className="h-5 w-5 text-gray-400 absolute top-3 left-3" />
                 <input
@@ -68,25 +80,22 @@ const Signup = () => {
                   name="password"
                   type="password"
                   required
-                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                  value={formData.password}
+                  onChange={handleChange}
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
                 />
               </div>
             </div>
 
+            {/* Role */}
             <div>
-              <label
-                htmlFor="role"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Role
-              </label>
+              <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
               <select
                 id="role"
                 name="role"
-                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300
-                 focus:outline-none focus:ring-indigo-500
-                  focus:border-indigo-500 sm:text-sm
-                   rounded-md"
+                value={formData.role}
+                onChange={handleChange}
+                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md"
               >
                 <option value="faculty">Faculty</option>
                 <option value="student">Student</option>
@@ -97,7 +106,7 @@ const Signup = () => {
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="group relative w-full flex justify-center py-2 px-4 bg-indigo-600 text-white rounded-md"
             >
               Register
             </button>
@@ -105,10 +114,7 @@ const Signup = () => {
         </form>
 
         <div className="text-center">
-          <Link
-            to="/login"
-            className="text-sm text-indigo-600 hover:text-indigo-500 font-medium"
-          >
+          <Link to="/login" className="text-sm text-indigo-600 hover:text-indigo-500">
             Already have an account? Login
           </Link>
         </div>
