@@ -22,7 +22,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password, role } = formData;
+    const { username,email, password, role } = formData;
 
     try {
       const response = await fetch("http://localhost:5000/register", {
@@ -30,7 +30,7 @@ const Signup = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username, password, role }),
+        body: JSON.stringify({ username,email, password, role }),
       });
 
       const data = await response.json();
