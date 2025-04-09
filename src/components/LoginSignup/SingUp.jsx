@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { EnvelopeIcon, LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
+import {
+  EnvelopeIcon,
+  LockClosedIcon,
+  UserCircleIcon,
+} from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
 
 const Signup = () => {
@@ -55,7 +59,12 @@ const Signup = () => {
           <div className="rounded-md shadow-sm space-y-4">
             {/* Username */}
             <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+              <label
+                htmlFor="username"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Username
+              </label>
               <div className="mt-1 relative">
                 <UserCircleIcon className="h-5 w-5 text-gray-400 absolute top-3 left-3" />
                 <input
@@ -69,10 +78,36 @@ const Signup = () => {
                 />
               </div>
             </div>
+            {/* email */}
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Email
+              </label>
+              <div className="mt-1 relative">
+                <EnvelopeIcon className="h-5 w-5 text-gray-400 absolute top-3 left-3" />
+                <input
+                  id="email"
+                  name="email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={handleChange}
+                  className="appearance-none block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md"
+                />
+              </div>
+            </div>
 
             {/* Password */}
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Password
+              </label>
               <div className="mt-1 relative">
                 <LockClosedIcon className="h-5 w-5 text-gray-400 absolute top-3 left-3" />
                 <input
@@ -89,7 +124,12 @@ const Signup = () => {
 
             {/* Role */}
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700">Role</label>
+              <label
+                htmlFor="role"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Role
+              </label>
               <select
                 id="role"
                 name="role"
@@ -114,7 +154,10 @@ const Signup = () => {
         </form>
 
         <div className="text-center">
-          <Link to="/login" className="text-sm text-indigo-600 hover:text-indigo-500">
+          <Link
+            to="/login"
+            className="text-sm text-indigo-600 hover:text-indigo-500"
+          >
             Already have an account? Login
           </Link>
         </div>
