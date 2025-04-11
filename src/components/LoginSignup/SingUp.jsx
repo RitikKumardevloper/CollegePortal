@@ -137,7 +137,7 @@ const Signup = () => {
                 onChange={handleChange}
                 className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 rounded-md"
               >
-                <option value="faculty">Faculty</option>
+                {/* <option value="teacher">Faculty</option> */}
                 <option value="student">Student</option>
               </select>
             </div>
