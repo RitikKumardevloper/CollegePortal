@@ -1,76 +1,82 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const EnquiryForm = () => {
-  const navigate = useNavigate();
-  const [enquiries, setEnquiries] = useState(
-    JSON.parse(localStorage.getItem("enquiries")) || []
-  );
-
+  const enquiryTypes = ["Direct", "Telephoninic", "Online"];
+  const courses = ["MCA", "BCA"];
   const [formData, setFormData] = useState({
     enquiryType: "Direct",
-    enquiryNo: generateEnquiryNumber(),
+    enquiryNo: "",
     studentName: "",
-    phoneNo: "",
+    phone: "",
     email: "",
     courseInterest: "",
     city: "",
     state: "",
     address: "",
     enquiryDetail: "",
+    followUpDate: "", // Initialize followUpDate
     status: "Pending",
     date: new Date().toLocaleDateString(),
-    followUpDate: "",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
 
-  const enquiryTypes = ["Direct", "Telephone", "Email", "Website", "Walk-in"];
-  const courses = ["B.Tech", "MBA", "B.Sc", "M.Tech", "BBA", "BCA"];
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData({
+      ...formData,
+      [name]: value, // Dynamically update the field
+    });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate API call delay
-    setTimeout(() => {
-      const updatedEnquiries = [...enquiries, formData];
+    console.log("Form Data:", formData); // Log the form data to verify before submitting
 
-      // Save to localStorage
-      localStorage.setItem("enquiries", JSON.stringify(updatedEnquiries));
-      setEnquiries(updatedEnquiries);
-
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/admin/enquiries/createenquiry",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure content-type is set to json
+          },
+          withCredentials: true, // Include credentials (cookies) if needed
+        }
+      );
+      console.log("Success:", response.data);
       setSuccessMessage("Enquiry submitted successfully!");
-      setIsSubmitting(false);
-
-      // Reset form
+      // Reset form data
       setFormData({
-        ...formData,
-        enquiryNo: generateEnquiryNumber(),
+        enquiryType: "Direct",
+        enquiryNo: "",
         studentName: "",
-        phoneNo: "",
+        phone: "",
         email: "",
+        courseInterest: "",
+        city: "",
+        state: "",
+        address: "",
         enquiryDetail: "",
+        followUpDate: "",
+        status: "Pending",
+        date: new Date().toLocaleDateString(),
       });
-
-      // Hide success message after 3 seconds
       setTimeout(() => setSuccessMessage(""), 3000);
-    }, 1000);
+    } catch (error) {
+      console.error("Error submitting enquiry:", error);
+      alert("Failed to submit enquiry. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
-
-  function generateEnquiryNumber() {
-    const lastNumber =
-      enquiries.length > 0
-        ? parseInt(enquiries[enquiries.length - 1].enquiryNo.split("-")[1])
-        : 0;
-    return `ENQ-${String(lastNumber + 1).padStart(4, "0")}`;
-  }
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
@@ -79,13 +85,12 @@ const EnquiryForm = () => {
           New Student Enquiry
         </h2>
         <button
-          onClick={() => navigate("/enquiries")}
+          onClick={() => navigate("/enquiry/allenquiry")}
           className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
         >
           View All Enquiries
         </button>
       </div>
-
       {successMessage && (
         <div className="mb-4 p-3 bg-green-100 text-green-700 rounded-md">
           {successMessage}
@@ -122,11 +127,13 @@ const EnquiryForm = () => {
               Enquiry Number
             </label>
             <input
+              readOnly
               type="text"
               name="enquiryNo"
               value={formData.enquiryNo}
-              readOnly
-              className="w-full p-2 border border-gray-300 rounded-md bg-gray-100"
+              onChange={handleChange}
+              required
+              className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
@@ -150,8 +157,8 @@ const EnquiryForm = () => {
             </label>
             <input
               type="tel"
-              name="phoneNo"
-              value={formData.phoneNo}
+              name="phone"
+              value={formData.phone}
               onChange={handleChange}
               required
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"

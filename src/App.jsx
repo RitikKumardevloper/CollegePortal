@@ -1,14 +1,17 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Sidebar from "./components/Sidebar";
 import TopNav from "./components/TopNav";
 import Dashboard from "./pages/Dashboard";
-import Students from "./pages/Students";
 import Faculty from "./pages/Faculty";
 import Courses from "./pages/Courses";
 import Attendance from "./pages/Attendance";
 import Settings from "./pages/Settings";
 import Login from "../src/components/LoginSignup/Login";
 import Signup from "../src/components/LoginSignup/SingUp"; // Fixed typo in import
+import AllStudents from "./pages/Students/AllStudents";
+import EnquiryForm from "./pages/Enquiry/EnquiryForm";
+import EnquiriesList from "./pages/Enquiry/EnquiriesList";
+import EnquiryDetail from "./pages/Enquiry/EnquiryDetail";
 
 // Main layout component for authenticated routes
 const MainLayout = ({ children }) => (
@@ -23,62 +26,60 @@ const MainLayout = ({ children }) => (
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Auth routes without sidebar/topnav */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+    <Routes>
+      {/* Auth routes without sidebar/topnav */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
 
-        {/* Main app routes with layout */}
-        <Route
-          path="/"
-          element={
-            <MainLayout>
-              <Dashboard />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/students"
-          element={
-            <MainLayout>
-              <Students />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/faculty"
-          element={
-            <MainLayout>
-              <Faculty />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/courses"
-          element={
-            <MainLayout>
-              <Courses />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/attendance"
-          element={
-            <MainLayout>
-              <Attendance />
-            </MainLayout>
-          }
-        />
-        <Route
-          path="/settings"
-          element={
-            <MainLayout>
-              <Settings />
-            </MainLayout>
-          }
-        />
-      </Routes>
-    </BrowserRouter>
+      {/* Main app routes with layout */}
+      <Route
+        path="/"
+        element={
+          <MainLayout>
+            <Dashboard />
+          </MainLayout>
+        }
+      />
+
+      <Route path="/students/allstudents" element={<AllStudents />} />
+
+      {/* Enquiey routes */}
+      <Route path="/enquiry/enquiryform" element={<EnquiryForm />} />
+      <Route path="/enquiry/allenquiry" element={<EnquiriesList />} />
+      <Route path="/enquiries/:enquiryNo" element={<EnquiryDetail />} />
+
+      <Route
+        path="/faculty"
+        element={
+          <MainLayout>
+            <Faculty />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/courses"
+        element={
+          <MainLayout>
+            <Courses />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/attendance"
+        element={
+          <MainLayout>
+            <Attendance />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <MainLayout>
+            <Settings />
+          </MainLayout>
+        }
+      />
+    </Routes>
   );
 }

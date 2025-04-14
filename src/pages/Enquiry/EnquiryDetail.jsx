@@ -4,15 +4,40 @@ import { useParams, Link } from "react-router-dom";
 const EnquiryDetail = () => {
   const { enquiryNo } = useParams();
   const [enquiry, setEnquiry] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedEnquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-    const foundEnquiry = storedEnquiries.find((e) => e.enquiryNo === enquiryNo);
-    setEnquiry(foundEnquiry);
+    const fetchEnquiry = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:5000/admin/enquiries/getenquiriesbyenquiryNo/${enquiryNo}`
+        );
+        if (!response.ok) {
+          throw new Error("Failed to fetch enquiry");
+        }
+        const data = await response.json();
+        setEnquiry(data);
+      } catch (error) {
+        console.error("Error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchEnquiry();
   }, [enquiryNo]);
+  console.log("Enquiry No:", enquiryNo);
+  console.log("Enquiry Data:", enquiry);
+  console.log("Loading State:", loading);
+
+  if (loading) {
+    return <div className="p-6 text-center">Loading...</div>;
+  }
 
   if (!enquiry) {
-    return <div className="p-6 text-center">Loading...</div>;
+    return (
+      <div className="p-6 text-center text-red-600">Enquiry not found.</div>
+    );
   }
 
   return (
@@ -22,7 +47,7 @@ const EnquiryDetail = () => {
           Enquiry Details: {enquiry.enquiryNo}
         </h2>
         <Link
-          to="/enquiries"
+          to="/enquiry/allenquiry"
           className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
         >
           Back to List
@@ -37,7 +62,7 @@ const EnquiryDetail = () => {
               <span className="font-medium">Name:</span> {enquiry.studentName}
             </p>
             <p>
-              <span className="font-medium">Phone:</span> {enquiry.phoneNo}
+              <span className="font-medium">Phone:</span> {enquiry.phone}
             </p>
             <p>
               <span className="font-medium">Email:</span> {enquiry.email || "-"}

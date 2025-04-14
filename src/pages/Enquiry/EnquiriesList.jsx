@@ -8,8 +8,19 @@ const EnquiriesList = () => {
   const [filterType, setFilterType] = useState("All");
 
   useEffect(() => {
-    const storedEnquiries = JSON.parse(localStorage.getItem("enquiries")) || [];
-    setEnquiries(storedEnquiries);
+    const fetchEnquiries = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:5000/admin/enquiries/getallenquiries"
+        );
+        const data = await response.json();
+        setEnquiries(data);
+      } catch (error) {
+        console.error("Error fetching enquiries:", error);
+      }
+    };
+
+    fetchEnquiries();
   }, []);
 
   const filteredEnquiries = enquiries.filter((enquiry) => {
@@ -24,14 +35,26 @@ const EnquiriesList = () => {
     return matchesSearch && matchesStatus && matchesType;
   });
 
-  const updateStatus = (enquiryNo, newStatus) => {
+  const updateStatus = async (enquiryNo, newStatus) => {
     const updatedEnquiries = enquiries.map((enquiry) =>
       enquiry.enquiryNo === enquiryNo
         ? { ...enquiry, status: newStatus }
         : enquiry
     );
     setEnquiries(updatedEnquiries);
-    localStorage.setItem("enquiries", JSON.stringify(updatedEnquiries));
+
+    try {
+      await fetch(
+        `http://localhost:5000/admin/enquiries/updatestatus/${enquiryNo}`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ status: newStatus }),
+        }
+      );
+    } catch (error) {
+      console.error("Failed to update status on server", error);
+    }
   };
 
   return (
@@ -39,7 +62,7 @@ const EnquiriesList = () => {
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Student Enquiries</h2>
         <Link
-          to="/enquiries/new"
+          to="/enquiry/enquiryform"
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md"
         >
           Add New Enquiry
@@ -167,11 +190,10 @@ const EnquiriesList = () => {
                     </select>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <Link
-                      to={`/enquiries/${enquiry.enquiryNo}`}
-                      className="text-blue-600 hover:text-blue-900 mr-3"
-                    >
-                      View
+                    <Link to={`/enquiries/${enquiry.enquiryNo}`}>
+                      <button className="bg-blue-500 text-white px-3 py-1 rounded">
+                        View
+                      </button>
                     </Link>
                   </td>
                 </tr>

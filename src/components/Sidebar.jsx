@@ -120,8 +120,8 @@ export default function Sidebar() {
       label: "Enquiry",
       children: [
         { to: "/enquiry/allenquiry", label: "All Enquiry" },
-        { to: "/enquiry/enquirydetails", label: "Enquiry Details" },
-        { to: "/enquiry/enquirylist", label: "Enquiry List" },
+        { to: "/enquiry/enquiryform", label: "Enquiry Form" },
+        { to: "/enquiries/:enquiryNo", label: "Enquiry List" },
       ],
     },
     {
