@@ -3,15 +3,21 @@ import Sidebar from "./components/Sidebar";
 import TopNav from "./components/TopNav";
 import Dashboard from "./pages/Dashboard";
 import Faculty from "./pages/Faculty";
-import Courses from "./pages/Courses";
+import Courses from "./pages/Courses/Courses";
 import Attendance from "./pages/Attendance";
 import Settings from "./pages/Settings";
 import Login from "../src/components/LoginSignup/Login";
 import Signup from "../src/components/LoginSignup/SingUp"; // Fixed typo in import
-import AllStudents from "./pages/Students/AllStudents";
+import AllStudents from "../src/pages/Students/AllStudents"
 import EnquiryForm from "./pages/Enquiry/EnquiryForm";
 import EnquiriesList from "./pages/Enquiry/EnquiriesList";
 import EnquiryDetail from "./pages/Enquiry/EnquiryDetail";
+import Addstudent from "./pages/Students/Addstudent";
+import Location from "./pages/Location/Location";
+import Students from "./pages/Students/Students";
+import ManageAdmin from "./pages/Admin/ManageAdmin"
+import ManageLocation from "./pages/Admin/ManageLocation"
+import ManageTeacher from "./pages/Admin/ManageTeacher"
 
 // Main layout component for authenticated routes
 const MainLayout = ({ children }) => (
@@ -40,14 +46,18 @@ export default function App() {
           </MainLayout>
         }
       />
-
+   
       <Route path="/students/allstudents" element={<AllStudents />} />
+      <Route path="/students/addstudent" element={<Addstudent/>} />
 
       {/* Enquiey routes */}
       <Route path="/enquiry/enquiryform" element={<EnquiryForm />} />
       <Route path="/enquiry/allenquiry" element={<EnquiriesList />} />
       <Route path="/enquiries/:enquiryNo" element={<EnquiryDetail />} />
 
+
+
+      <Route path="/courses/allcourses" element={<Courses />} />
       <Route
         path="/faculty"
         element={
@@ -78,6 +88,24 @@ export default function App() {
           <MainLayout>
             <Settings />
           </MainLayout>
+        }
+      />
+        <Route
+        path="/admin/manage-location"
+        element={
+         <ManageLocation/>
+        }
+      />
+          <Route
+        path="/admin/manage-admin"
+        element={
+         <ManageAdmin/>
+        }
+      />
+          <Route
+        path="/admin/manage-teacher"
+        element={
+         <ManageTeacher/>
         }
       />
     </Routes>

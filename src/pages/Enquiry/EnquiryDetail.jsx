@@ -1,22 +1,25 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 const EnquiryDetail = () => {
   const { enquiryNo } = useParams();
   const [enquiry, setEnquiry] = useState(null);
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchEnquiry = async () => {
       try {
-        const response = await fetch(
+        const response = await axios.get(
           `http://localhost:5000/admin/enquiries/getenquiriesbyenquiryNo/${enquiryNo}`
         );
-        if (!response.ok) {
-          throw new Error("Failed to fetch enquiry");
-        }
-        const data = await response.json();
-        setEnquiry(data);
+   
+       
+        setEnquiry(response.data);
+        console.log(response.data)
       } catch (error) {
         console.error("Error:", error);
       } finally {
@@ -123,12 +126,12 @@ const EnquiryDetail = () => {
       </div>
 
       <div className="mt-6 flex justify-end">
-        <Link
-          to={`/enquiries/edit/${enquiry.enquiryNo}`}
+        <button
+        onClick={() => navigate("/enquiry/enquiryform", {state:enquiryNo})}
           className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md mr-2"
         >
           Edit Enquiry
-        </Link>
+        </button>
       </div>
     </div>
   );

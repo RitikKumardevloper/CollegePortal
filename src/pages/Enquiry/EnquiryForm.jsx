@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const EnquiryForm = () => {
-  const enquiryTypes = ["Direct", "Telephoninic", "Online"];
+  // inside EnquiryForm component
+  const location = useLocation();
+  const editEnquiryNo = location.state || null;
+
+  const enquiryTypes = ["Direct", "Telephonic", "Online"];
   const courses = ["MCA", "BCA"];
   const [formData, setFormData] = useState({
     enquiryType: "Direct",
@@ -16,13 +22,14 @@ const EnquiryForm = () => {
     state: "",
     address: "",
     enquiryDetail: "",
-    followUpDate: "", // Initialize followUpDate
+
     status: "Pending",
     date: new Date().toLocaleDateString(),
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
+  const [enquiryNo, setEnquiryNo] = useState("");
 
   const navigate = useNavigate();
 
@@ -34,42 +41,87 @@ const EnquiryForm = () => {
     });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setIsSubmitting(true);
+
+  //   console.log("Form Data:", formData); // Log the form data to verify before submitting
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:5000/admin/enquiries/createenquiry",
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json", // Ensure content-type is set to json
+  //         },
+  //         withCredentials: true, // Include credentials (cookies) if needed
+  //       }
+  //     );
+  //     console.log("Success:", response.data);
+  //     setSuccessMessage("Enquiry submitted successfully!");
+  //     // Reset form data
+  //     setFormData({
+  //       enquiryType: "Direct",
+  //       enquiryNo: "",
+  //       studentName: "",
+  //       phone: "",
+  //       email: "",
+  //       courseInterest: "",
+  //       city: "",
+  //       state: "",
+  //       address: "",
+  //       enquiryDetail: "",
+
+  //       status: "Pending",
+  //       date: new Date().toLocaleDateString(),
+  //     });
+  //     setTimeout(() => setSuccessMessage(""), 3000);
+  //   } catch (error) {
+  //     console.error("Error submitting enquiry:", error);
+  //     alert("Failed to submit enquiry. Please try again.");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    console.log("Form Data:", formData); // Log the form data to verify before submitting
-
     try {
-      const response = await axios.post(
-        "http://localhost:5000/admin/enquiries/createenquiry",
-        formData,
-        {
-          headers: {
-            "Content-Type": "application/json", // Ensure content-type is set to json
-          },
-          withCredentials: true, // Include credentials (cookies) if needed
-        }
-      );
-      console.log("Success:", response.data);
-      setSuccessMessage("Enquiry submitted successfully!");
-      // Reset form data
-      setFormData({
-        enquiryType: "Direct",
-        enquiryNo: "",
-        studentName: "",
-        phone: "",
-        email: "",
-        courseInterest: "",
-        city: "",
-        state: "",
-        address: "",
-        enquiryDetail: "",
-        followUpDate: "",
-        status: "Pending",
-        date: new Date().toLocaleDateString(),
-      });
-      setTimeout(() => setSuccessMessage(""), 3000);
+      if (editEnquiryNo) {
+        // update existing enquiry
+        const res = await axios.put(
+          `http://localhost:5000/admin/enquiries/updatestatus/${enquiryNo}`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        setSuccessMessage("Enquiry updated successfully!");
+      } else {
+        // create new enquiry
+        const res = await axios.post(
+          "http://localhost:5000/admin/enquiries/createenquiry",
+          formData,
+          {
+            headers: {
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
+        );
+        setSuccessMessage("Enquiry submitted successfully!");
+      }
+
+      setTimeout(() => {
+        setSuccessMessage("");
+        navigate("/enquiry/allenquiry");
+      }, 2000); // redirect after 2 seconds
+      
     } catch (error) {
       console.error("Error submitting enquiry:", error);
       alert("Failed to submit enquiry. Please try again.");
@@ -78,12 +130,68 @@ const EnquiryForm = () => {
     }
   };
 
+  //   useEffect(()=>{
+  //     const fetchNextEnquiry = async () =>{
+  //       try{
+  //         const res = await axios.get("http://localhost:5000/admin/enquiries/getEnquiryNo");
+  //         setFormData((prev) => ({
+  //           ...prev,
+  //           enquiryNo: res.data.enquiryNo,  // Set enquiry number from backend
+  //         }));
+  //         setEnquiryNo(res.data.enquiryNo);
+  //         console.log(res.data.enquiryNo);
+  //       }catch (err){
+  //         console.error("Failed to fetch next enquiry number");
+
+  //       }
+  //     };
+  // fetchNextEnquiry();
+
+  //   },[]);
+
+  useEffect(() => {
+    const fetchEnquiryData = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/admin/enquiries/getenquiriesbyenquiryNo/${editEnquiryNo}`
+        );
+        const enquiry = res.data;
+        setFormData(enquiry); // Fill form with existing data
+        setEnquiryNo(enquiry.enquiryNo); // Also update displayed enquiry number
+      } catch (error) {
+        console.error("Failed to fetch enquiry details:", error);
+      }
+    };
+
+    if (editEnquiryNo) {
+      fetchEnquiryData();
+    } else {
+      // Fetch fresh enquiry number if creating new
+      const fetchNextEnquiry = async () => {
+        try {
+          const res = await axios.get(
+            "http://localhost:5000/admin/enquiries/getEnquiryNo"
+          );
+          setFormData((prev) => ({
+            ...prev,
+            enquiryNo: res.data.enquiryNo,
+          }));
+          setEnquiryNo(res.data.enquiryNo);
+        } catch (err) {
+          console.error("Failed to fetch next enquiry number");
+        }
+      };
+      fetchNextEnquiry();
+    }
+  }, []);
+
   return (
     <div className="bg-white p-6 rounded-lg shadow-md max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800">
-          New Student Enquiry
+          {editEnquiryNo ? "Edit Student Enquiry" : "New Student Enquiry"}
         </h2>
+
         <button
           onClick={() => navigate("/enquiry/allenquiry")}
           className="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded-md"
@@ -130,8 +238,7 @@ const EnquiryForm = () => {
               readOnly
               type="text"
               name="enquiryNo"
-              value={formData.enquiryNo}
-              onChange={handleChange}
+              value={enquiryNo}
               required
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
@@ -226,18 +333,19 @@ const EnquiryForm = () => {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Follow-up Date
             </label>
             <input
               type="date"
-              name="followUpDate"
-              value={formData.followUpDate}
+             
+              value={formData.date}
               onChange={handleChange}
+              
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Full Width Fields */}
@@ -281,29 +389,35 @@ const EnquiryForm = () => {
             disabled={isSubmitting}
             className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md disabled:bg-blue-400 flex items-center"
           >
-            {isSubmitting && (
-              <svg
-                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
+            {isSubmitting ? (
+              <>
+                <svg
+                  className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  ></path>
+                </svg>
+                {editEnquiryNo ? "Updating..." : "Submitting..."}
+              </>
+            ) : editEnquiryNo ? (
+              "Update Enquiry"
+            ) : (
+              "Submit Enquiry"
             )}
-            {isSubmitting ? "Submitting..." : "Submit Enquiry"}
           </button>
         </div>
       </form>

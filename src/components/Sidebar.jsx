@@ -13,8 +13,13 @@ import {
   FiLogOut,
   FiCheckSquare,
 } from "react-icons/fi";
+import { MdOutlineCastForEducation } from "react-icons/md";
+import { FaFileAlt } from "react-icons/fa"; // "Report Document" look
 import { HiOutlineBuildingOffice } from "react-icons/hi2";
 import { IoLibraryOutline } from "react-icons/io5";
+import { GiTeacher } from "react-icons/gi";
+import { FaUserShield, FaChartLine } from "react-icons/fa"; // Font Awesome
+import { MdDashboard } from "react-icons/md"; // Material Design
 
 export default function Sidebar() {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -22,69 +27,61 @@ export default function Sidebar() {
   const navItems = [
     { to: "/", icon: <FiHome />, label: "Dashboard" },
 
-    {
-      icon: <HiOutlineBuildingOffice />,
-      label: "Frountoffice",
-      children: [
-        { to: "/frontoffice/admission-inquiry", label: "Admission Inquiry" },
-        { to: "/frontoffice/visitor-book", label: "Visitor Book" },
-        { to: "/frontoffice/complaints", label: "Complaints" },
-      ],
-    },
+    // {
+    //   icon: <HiOutlineBuildingOffice size={24} />,
+    //   label: "Frountoffice",
+    //   children: [
+    //     { to: "/frontoffice/admission-inquiry", label: "Admission Inquiry" },
+    //     { to: "/frontoffice/visitor-book", label: "Visitor Book" },
+    //     { to: "/frontoffice/complaints", label: "Complaints" },
+    //   ],
+    // },
 
     {
-      icon: <FiUsers />,
+      icon: <FiUsers size={24} />,
       label: "Students",
       children: [
         { to: "/students/allstudents", label: "All Students" },
-        { to: "/students/addstudents", label: "Add Students" },
-        { to: "/students/editstudent", label: "Edit Students" },
-        { to: "/students/aboutstudents", label: "About Student" },
+        { to: "/students/addstudent", label: "Add Students" },
+        // { to: "/students/editstudent", label: "Edit Students" },
+        // { to: "/students/aboutstudents", label: "About Student" },
         { to: "/students/studentattendance", label: "Student Attendance" },
       ],
     },
     {
-      icon: <FiUser />,
+      icon: <FiUser size={24} />,
       label: "Teacher",
       children: [
         { to: "/teacher/allteacher", label: "All Teacher" },
-        { to: "/teacher/editteacher", label: "Edit Teacher" },
-        { to: "/teacher/addteacher", label: "Add Teacher" },
-        { to: "/teacher/aboutteacher", label: "About Teacher" },
+        // { to: "/teacher/editteacher", label: "Edit Teacher" },
+        // { to: "/teacher/addteacher", label: "Add Teacher" },
+        // { to: "/teacher/aboutteacher", label: "About Teacher" },
         { to: "/teacher/teachertimetable", label: "Teacher TimeTable" },
       ],
     },
     {
-      icon: <FiBook />,
+      icon: <FiBook size={24} />,
       label: "Courses",
       children: [
-        { to: "/courses/allcourses", label: "All Courses" },
-        { to: "/courses/editcourses", label: "Edit Courses" },
-        { to: "/courses/addcourses", label: "Add Courses" },
-        { to: "/courses/aboutcourses", label: "About Courses" },
+        { to: "/courses/allcourses", label: "Add course" },
+        // { to: "/courses/editcourses", label: "Add fees" },
+        // { to: "/courses/addcourses", label: "Add Courses" },
+        // { to: "/courses/aboutcourses", label: "About Courses" },
       ],
     },
+    // {
+    //   icon: <IoLibraryOutline size={24} />,
+    //   label: "Library",
+    //   children: [
+    //     { to: "/library/alllibraryassests", label: "AllLibararyAssets" },
+    //     { to: "/library/addlibraryassests", label: "AddLibararyAssets" },
+    //     { to: "/library/editlibraryassests", label: "editLibararyAssets" },
+    //     { to: "/library/bookstatus", label: "Bookstatus" },
+    //   ],
+    // },
+
     {
-      icon: <IoLibraryOutline />,
-      label: "Library",
-      children: [
-        { to: "/library/alllibraryassests", label: "AllLibararyAssets" },
-        { to: "/library/addlibraryassests", label: "AddLibararyAssets" },
-        { to: "/library/editlibraryassests", label: "editLibararyAssets" },
-        { to: "/library/bookstatus", label: "Bookstatus" },
-      ],
-    },
-    {
-      icon: <FiBriefcase />,
-      label: "Department",
-      children: [
-        { to: "/department/alldepartments", label: "AllDepartments" },
-        { to: "/department/adddepartments", label: "AddDepartments" },
-        { to: "/department/editdepartments", label: "editDepartments" },
-      ],
-    },
-    {
-      icon: <FiUsers />,
+      icon: <FiUsers size={24} />,
       label: "Staff",
       children: [
         { to: "/staff/allstaff", label: "All Staff" },
@@ -95,7 +92,7 @@ export default function Sidebar() {
       ],
     },
     {
-      icon: <FiDollarSign />,
+      icon: <FiDollarSign size={24} />,
       label: "Fees",
       children: [
         { to: "/fees/allfees", label: "All Fees" },
@@ -105,50 +102,76 @@ export default function Sidebar() {
         { to: "/fees/feesrecipet", label: "Fees Recipet" },
       ],
     },
+    // {
+    //   to: "",
+    //   icon: <FiBook size={24} />,
+    //   label: "Class",
+    //   children: [
+    //     { to: "/class/classlist", label: "ClassList" },
+    //     { to: "/class/classtimetable", label: "ClassTimeTable" },
+    //   ],
+    // },
     {
       to: "",
-      icon: <FiBook />,
-      label: "Class",
-      children: [
-        { to: "/class/classlist", label: "ClassList" },
-        { to: "/class/classtimetable", label: "ClassTimeTable" },
-      ],
-    },
-    {
-      to: "",
-      icon: <FiFileText />,
+      icon: <FiFileText size={24} />,
       label: "Enquiry",
       children: [
         { to: "/enquiry/allenquiry", label: "All Enquiry" },
         { to: "/enquiry/enquiryform", label: "Enquiry Form" },
-        { to: "/enquiries/:enquiryNo", label: "Enquiry List" },
+        // { to: "/enquiries/:enquiryNo", label: "Enquiry List" },
       ],
     },
-    {
-      to: "/humanresources",
-      icon: <FiBriefcase />,
-      label: "Human Resources",
-      children: [
-        { to: "/humanresources/empleiesleavereq", label: "All Staff" },
-        { to: "/humanresources/addstaff", label: "Add Staff" },
-        { to: "/humanresources/editstaff", label: "Edit Staff" },
-        { to: "/humanresources/aboutstaff", label: "About Staff" },
-        { to: "/humanresources/staffattendance", label: "Staff Attendance" },
-      ],
-    },
+    // {
+    //   to: "/humanresources",
+    //   icon: <FiBriefcase size={24} />,
+    //   label: "Human Resources",
+    //   children: [
+    //     { to: "/humanresources/empleiesleavereq", label: "All Staff" },
+    //     { to: "/humanresources/addstaff", label: "Add Staff" },
+    //     { to: "/humanresources/editstaff", label: "Edit Staff" },
+    //     { to: "/humanresources/aboutstaff", label: "About Staff" },
+    //     { to: "/humanresources/staffattendance", label: "Staff Attendance" },
+    //   ],
+    // },
     {
       to: "/attendance",
-      icon: <FiCheckSquare />,
+      icon: <FiCheckSquare size={24} />,
       label: "Attendance",
       children: [
-        { to: "/students/allstaff", label: "All Staff" },
-        { to: "/students/addstaff", label: "Add Staff" },
-        { to: "/students/editstaff", label: "Edit Staff" },
-        { to: "/students/aboutstaff", label: "About Staff" },
-        { to: "/students/staffattendance", label: "Staff Attendance" },
+        { to: "/students/allstaff", label: "Faculty" },
+        { to: "/students/addstaff", label: "Staff" },
+        { to: "/students/editstaff", label: "Student" },
+
       ],
     },
-    { to: "/settings", icon: <FiSettings />, label: "Settings" },
+    {
+      icon: <GiTeacher size={24} />,
+      label: "Session",
+      children: [{ to: "/session/allstudents", label: "Add Session" }],
+    },
+    {
+      icon: <FaFileAlt size={24} />,
+      label: "Report",
+      children: [
+        { to: "/session/allstudents", label: "Enquiry" },
+        { to: "/session/allstudents", label: "Admission" },
+        { to: "/session/allstudents", label: "Collection" },
+        { to: "/session/allstudents", label: "Payment" },
+        { to: "/session/allstudents", label: "Balance Fees" },
+        { to: "/session/allstudents", label: "Profit & Loss" }
+      ],
+    },
+    {
+      icon: <FaUserShield size={24} />,
+      label: "Admin",
+      children: [
+        { to: "/admin/manage-admin", label: "Manange Admin" },
+        { to: "/admin/manage-location", label: "Manage Location" },
+        { to: "/admin/manage-teacher", label: "Manage Teacher" },
+      ],
+    },
+
+    { to: "/settings", icon: <FiSettings size={24} />, label: "Settings" },
   ];
 
   return (

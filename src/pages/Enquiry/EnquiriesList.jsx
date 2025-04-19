@@ -1,20 +1,20 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 const EnquiriesList = () => {
   const [enquiries, setEnquiries] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("All");
   const [filterType, setFilterType] = useState("All");
-
+  
   useEffect(() => {
     const fetchEnquiries = async () => {
       try {
-        const response = await fetch(
+        const response = await axios.get(
           "http://localhost:5000/admin/enquiries/getallenquiries"
         );
-        const data = await response.json();
-        setEnquiries(data);
+    
+        setEnquiries(response.data);
       } catch (error) {
         console.error("Error fetching enquiries:", error);
       }
@@ -25,8 +25,8 @@ const EnquiriesList = () => {
 
   const filteredEnquiries = enquiries.filter((enquiry) => {
     const matchesSearch =
-      enquiry.studentName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      enquiry.enquiryNo.toLowerCase().includes(searchTerm.toLowerCase());
+    (enquiry.studentName?.toLowerCase() || "").includes(searchTerm.toLowerCase()) ||
+    (enquiry.enquiryNo?.toLowerCase() || "").includes(searchTerm.toLowerCase());
     const matchesStatus =
       filterStatus === "All" || enquiry.status === filterStatus;
     const matchesType =
@@ -35,27 +35,34 @@ const EnquiriesList = () => {
     return matchesSearch && matchesStatus && matchesType;
   });
 
+
   const updateStatus = async (enquiryNo, newStatus) => {
+    // 1. Locally update the state (optimistic UI)
     const updatedEnquiries = enquiries.map((enquiry) =>
       enquiry.enquiryNo === enquiryNo
         ? { ...enquiry, status: newStatus }
         : enquiry
     );
     setEnquiries(updatedEnquiries);
-
+  
+    // 2. API call with axios
     try {
-      await fetch(
+      await axios.put(
         `http://localhost:5000/admin/enquiries/updatestatus/${enquiryNo}`,
-        {
-          method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ status: newStatus }),
-        }
+        { status: newStatus },
+     
       );
     } catch (error) {
       console.error("Failed to update status on server", error);
+      // Optional: Rollback local update if API fails
     }
   };
+  // useEffect(()=>{
+  //   const updateStatus = async () =>{
+  //     axios.put("http://localhost:5000/admin/enquiries/updatestatus/${enquiryNo}`")
+
+  //   }
+  // },[]);
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md max-w-6xl mx-auto">
