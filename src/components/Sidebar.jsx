@@ -54,7 +54,7 @@ export default function Sidebar() {
       children: [
         { to: "/teacher/allteacher", label: "All Teacher" },
         // { to: "/teacher/editteacher", label: "Edit Teacher" },
-        // { to: "/teacher/addteacher", label: "Add Teacher" },
+        { to: "/teacher/addteacher", label: "Add Teacher" },
         // { to: "/teacher/aboutteacher", label: "About Teacher" },
         { to: "/teacher/teachertimetable", label: "Teacher TimeTable" },
       ],
@@ -63,9 +63,9 @@ export default function Sidebar() {
       icon: <FiBook size={24} />,
       label: "Courses",
       children: [
-        { to: "/courses/allcourses", label: "Add course" },
+        { to: "/courses/allcourses", label: "All course" },
+        { to: "/courses/addcourses", label: "Add Courses" },
         // { to: "/courses/editcourses", label: "Add fees" },
-        // { to: "/courses/addcourses", label: "Add Courses" },
         // { to: "/courses/aboutcourses", label: "About Courses" },
       ],
     },
@@ -86,7 +86,7 @@ export default function Sidebar() {
       children: [
         { to: "/staff/allstaff", label: "All Staff" },
         { to: "/staff/addstaff", label: "Add Staff" },
-        { to: "/staff/editstaff", label: "Edit Staff" },
+        // { to: "/staff/editstaff", label: "Edit Staff" },
         { to: "/staff/aboutstaff", label: "About Staff" },
         { to: "/staff/staffattendance", label: "Staff Attendance" },
       ],
@@ -97,7 +97,7 @@ export default function Sidebar() {
       children: [
         { to: "/fees/allfees", label: "All Fees" },
         { to: "/fees/addfees", label: "Add Fees" },
-        { to: "/fees/editfees", label: "Edit Fees" },
+        // { to: "/fees/editfees", label: "Edit Fees" },
         { to: "/fees/feesdiscount", label: "Fees Discount" },
         { to: "/fees/feesrecipet", label: "Fees Recipet" },
       ],
@@ -153,12 +153,12 @@ export default function Sidebar() {
       icon: <FaFileAlt size={24} />,
       label: "Report",
       children: [
-        { to: "/session/allstudents", label: "Enquiry" },
-        { to: "/session/allstudents", label: "Admission" },
-        { to: "/session/allstudents", label: "Collection" },
-        { to: "/session/allstudents", label: "Payment" },
-        { to: "/session/allstudents", label: "Balance Fees" },
-        { to: "/session/allstudents", label: "Profit & Loss" }
+        { to: "/report/enquiry", label: "Enquiry" },
+        { to: "/report/admission", label: "Admission" },
+        { to: "/report/collection", label: "Collection" },
+        { to: "/report/payment", label: "Payment" },
+        { to: "/report/balance", label: "Balance Fees" },
+        { to: "/report/profit&loss", label: "Profit & Loss" }
       ],
     },
     {

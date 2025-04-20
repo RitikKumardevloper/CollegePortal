@@ -1,7 +1,7 @@
-import { faculty } from "../data/faculty";
-import { DataTable } from "../components/DataTable";
+import { faculty } from "../../data/faculty";
+import { DataTable } from "../../components/DataTable";
 
-export default function Faculty() {
+export default function FacultyAttendance() {
   const columns = [
     { key: "id", title: "ID" },
     { key: "name", title: "Name" },
