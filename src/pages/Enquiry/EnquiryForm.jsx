@@ -13,7 +13,6 @@ const EnquiryForm = () => {
   const courses = ["MCA", "BCA"];
   const [formData, setFormData] = useState({
     enquiryType: "Direct",
-    enquiryNo: "",
     studentName: "",
     phone: "",
     email: "",
@@ -89,39 +88,38 @@ const EnquiryForm = () => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    try {
-      if (editEnquiryNo) {
-        // update existing enquiry
-        const res = await axios.put(
-          `http://localhost:5000/admin/enquiries/updatestatus/${enquiryNo}`,
-          formData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        setSuccessMessage("Enquiry updated successfully!");
-      } else {
-        // create new enquiry
-        const res = await axios.post(
-          "http://localhost:5000/admin/enquiries/createenquiry",
-          formData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-            withCredentials: true,
-          }
-        );
-        setSuccessMessage("Enquiry submitted successfully!");
-      }
+    console.log("Form Data:", formData); // Log the form data to verify before submitting
 
-      setTimeout(() => {
-        setSuccessMessage("");
-        navigate("/enquiry/allenquiry");
-      }, 2000); // redirect after 2 seconds
-      
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/admin/enquiries/createenquiry",
+        formData,
+        {
+          headers: {
+            "Content-Type": "application/json", // Ensure content-type is set to json
+          },
+          withCredentials: true, // Include credentials (cookies) if needed
+        }
+      );
+      console.log("Success:", response.data);
+      setSuccessMessage("Enquiry submitted successfully!");
+      // Reset form data
+      setFormData({
+        enquiryType: "Direct",
+        enquiryNo: "",
+        studentName: "",
+        phone: "",
+        email: "",
+        courseInterest: "",
+        city: "",
+        state: "",
+        address: "",
+        enquiryDetail: "",
+        followUpDate: "",
+        status: "Pending",
+        date: new Date().toLocaleDateString(),
+      });
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error("Error submitting enquiry:", error);
       alert("Failed to submit enquiry. Please try again.");
@@ -230,7 +228,7 @@ const EnquiryForm = () => {
             </select>
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Enquiry Number
             </label>
@@ -242,7 +240,7 @@ const EnquiryForm = () => {
               required
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
