@@ -175,12 +175,12 @@ export default function Sidebar() {
   ];
 
   return (
-    <div className="w-64 bg-white shadow-md">
+    <div className="w-64 bg-white shadow-md space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900 p-6">
       <div className="p-4 border-b">
         <h1 className="text-xl font-bold text-blue-600">College Admin</h1>
       </div>
       <nav className="p-4">
-        <ul className="space-y-2">
+        <ul className="space-y-2 space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900">
           {navItems.map((item, index) => (
             <li key={index}>
               {item.children ? (
@@ -189,19 +189,19 @@ export default function Sidebar() {
                     onClick={() =>
                       setOpenDropdown(openDropdown === index ? null : index)
                     }
-                    className="flex items-center w-full p-2 rounded-lg hover:bg-gray-100"
+                    className="flex items-center w-full  space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900 rounded-lg hover:bg-gray-100"
                   >
                     <span className="mr-3">{item.icon}</span>
                     {item.label}
                   </button>
                   {openDropdown === index && (
-                    <ul className="ml-6 mt-1 space-y-1">
+                    <ul className="ml-6 mt-1 space-y-1 ">
                       {item.children.map((child) => (
                         <li key={child.to}>
                           <NavLink
                             to={child.to}
                             className={({ isActive }) =>
-                              `block p-2 rounded-md text-sm ${
+                              `block p-2 rounded-md text-sm space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900 ${
                                 isActive
                                   ? "bg-blue-100 text-blue-800"
                                   : "hover:bg-gray-100"

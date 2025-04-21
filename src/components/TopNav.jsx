@@ -33,7 +33,7 @@ export default function TopNav() {
   };
 
   return (
-    <header className="bg-white shadow-sm">
+    <header className="bg-white shadow-sm space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900 p-6">
       <div className="flex items-center justify-between p-4">
         <div className="relative w-64">
           <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -55,7 +55,7 @@ export default function TopNav() {
             <div className="flex items-center space-x-2">
               <NavLink
                 to="/login"
-                className="px-4 py-2 rounded-md text-gray-600 hover:bg-gray-100 transition-colors"
+                className="px-4 py-2 rounded-md space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900 text-gray-600 hover:bg-gray-100 transition-colors"
               >
                 Login
               </NavLink>

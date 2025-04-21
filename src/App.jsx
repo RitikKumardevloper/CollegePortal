@@ -1,6 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { checkAuth } from "./api/auth"; // ✅ You already have this
+import { checkAuth } from "./api/auth";
 import Sidebar from "./components/Sidebar";
 import TopNav from "./components/TopNav";
 import Dashboard from "./pages/Dashboard";
@@ -30,29 +30,36 @@ const MainLayout = ({ children }) => (
     <Sidebar />
     <div className="flex-1 flex flex-col overflow-hidden">
       <TopNav />
-      <main className="flex-1 overflow-y-auto p-6">{children}</main>
+      <main className="flex-1 overflow-y-auto p-6 space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900">{children}</main>
     </div>
   </div>
 );
 
 export default function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
   const location = useLocation();
 
+  // Load dark mode setting from localStorage when the app starts
   useEffect(() => {
-    const check = async () => {
-      const res = await checkAuth();
-      setIsAuthenticated(res.isAuthenticated);
-    };
-    check();
+    const savedDarkMode = localStorage.getItem("darkMode") === "true";
+    setDarkMode(savedDarkMode);
   }, []);
 
-  if (isAuthenticated === null) return <div>Loading...</div>;
+  // Apply dark mode globally to the html element
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
 
-  // If user is not authenticated and not on login/signup → redirect to login
-  if (!isAuthenticated && !["/login", "/signup"].includes(location.pathname)) {
-    return <Navigate to="/login" replace />;
-  }
+  // Save dark mode preference to localStorage
+  const handleDarkModeToggle = () => {
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode); 
+    localStorage.setItem("darkMode", newDarkMode);
+  };
 
   return (
     <Routes>
@@ -64,7 +71,10 @@ export default function App() {
         path="/"
         element={
           <MainLayout>
-            <Dashboard />
+            <Dashboard
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -72,7 +82,10 @@ export default function App() {
         path="/students/allstudents"
         element={
           <MainLayout>
-            <AllStudents />
+            <AllStudents
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -80,7 +93,10 @@ export default function App() {
         path="/students/addstudent"
         element={
           <MainLayout>
-            <Addstudent />
+            <Addstudent
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -88,7 +104,10 @@ export default function App() {
         path="/enquiry/enquiryform"
         element={
           <MainLayout>
-            <EnquiryForm />
+            <EnquiryForm
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -96,7 +115,10 @@ export default function App() {
         path="/enquiry/allenquiry"
         element={
           <MainLayout>
-            <EnquiriesList />
+            <EnquiriesList
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -104,7 +126,10 @@ export default function App() {
         path="/enquiries/:enquiryNo"
         element={
           <MainLayout>
-            <EnquiryDetail />
+            <EnquiryDetail
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -112,7 +137,10 @@ export default function App() {
         path="/courses/allcourses"
         element={
           <MainLayout>
-            <Courses />
+            <Courses
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -120,15 +148,10 @@ export default function App() {
         path="/faculty"
         element={
           <MainLayout>
-            <Faculty />
-          </MainLayout>
-        }
-      />
-      <Route
-        path="/courses"
-        element={
-          <MainLayout>
-            <Courses />
+            <Faculty
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -136,7 +159,10 @@ export default function App() {
         path="/attendance"
         element={
           <MainLayout>
-            <Attendance />
+            <Attendance
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -144,15 +170,22 @@ export default function App() {
         path="/settings"
         element={
           <MainLayout>
-            <Settings />
+            <Settings
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
+      {/* Admin Routes */}
       <Route
         path="/admin/manage-location"
         element={
           <MainLayout>
-            <ManageLocation />
+            <ManageLocation
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -160,7 +193,10 @@ export default function App() {
         path="/admin/manage-admin"
         element={
           <MainLayout>
-            <ManageAdmin />
+            <ManageAdmin
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -168,15 +204,22 @@ export default function App() {
         path="/admin/manage-teacher"
         element={
           <MainLayout>
-            <ManageTeacher />
+            <ManageTeacher
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
+      {/* Report Routes */}
       <Route
         path="/report/enquiry"
         element={
           <MainLayout>
-            <Enquiry />
+            <Enquiry
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -184,7 +227,10 @@ export default function App() {
         path="/report/admission"
         element={
           <MainLayout>
-            <Admission />
+            <Admission
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -192,7 +238,10 @@ export default function App() {
         path="/report/collection"
         element={
           <MainLayout>
-            <Collection />
+            <Collection
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -200,7 +249,10 @@ export default function App() {
         path="/report/payment"
         element={
           <MainLayout>
-            <Payment />
+            <Payment
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -208,7 +260,10 @@ export default function App() {
         path="/report/balance"
         element={
           <MainLayout>
-            <BalanceFees />
+            <BalanceFees
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
           </MainLayout>
         }
       />
@@ -216,11 +271,10 @@ export default function App() {
         path="/report/profit&loss"
         element={
           <MainLayout>
-            <Profit />
+            <Profit darkMode={darkMode} toggleDarkMode={handleDarkModeToggle} />
           </MainLayout>
         }
       />
     </Routes>
-    // hey there! 👋
   );
 }

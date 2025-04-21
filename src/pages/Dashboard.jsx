@@ -38,7 +38,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-800">Dashboard Overview</h1>
+      <h1 className="text-2xl font-boldspace-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900  text-gray-800">Dashboard Overview</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatsCard
