@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { LockClosedIcon, UserCircleIcon } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -18,28 +19,29 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { username, password } = formData;
-
+  
     try {
       const response = await fetch("http://localhost:5000/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include", // optional if you're using cookies
+        credentials: "include",
         body: JSON.stringify({ username, password }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        alert("Login Successful ✅");
-        navigate("/"); // 👈 redirect to root route
+        localStorage.setItem("token", data.token);
+        toast.success("Login Successful ✅");
+        navigate("/");
       } else {
-        alert(data.message || "Invalid credentials ❌");
+        toast.error(data.message || "Invalid credentials ❌");
       }
     } catch (error) {
       console.error("Login Error:", error);
-      alert("Server error ❌");
+      toast.error("Server error ❌");
     }
   };
 

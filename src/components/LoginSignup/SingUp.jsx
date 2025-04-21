@@ -5,6 +5,7 @@ import {
   UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -22,31 +23,32 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username,email, password, role } = formData;
-
+    const { username, email, password, role } = formData;
+  
     try {
       const response = await fetch("http://localhost:5000/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username,email, password, role }),
+        body: JSON.stringify({ username, email, password, role }),
       });
-
+  
       const data = await response.json();
-
+  
       if (response.ok) {
-        alert("Registered Successfully");
-        navigate("/login");
+        localStorage.setItem("token", data.token); // ✅ Save token
+        toast.success("Registered Successfully ✅");
+        navigate("/login"); // 👈 redirect to login page
       } else {
-        alert(data.message || "Registration Failed");
+        toast.error(data.message || "Registration Failed ❌");
       }
     } catch (err) {
       console.error(err);
-      alert("Server Error");
+      toast.error("Server Error ❌");
     }
   };
-
+  
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
