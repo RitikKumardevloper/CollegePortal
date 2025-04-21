@@ -7,7 +7,6 @@ const EnquiryForm = () => {
   const courses = ["MCA", "BCA"];
   const [formData, setFormData] = useState({
     enquiryType: "Direct",
-    enquiryNo: "",
     studentName: "",
     phone: "",
     email: "",
@@ -56,7 +55,6 @@ const EnquiryForm = () => {
       // Reset form data
       setFormData({
         enquiryType: "Direct",
-        enquiryNo: "",
         studentName: "",
         phone: "",
         email: "",
@@ -122,7 +120,7 @@ const EnquiryForm = () => {
             </select>
           </div>
 
-          <div>
+          {/* <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Enquiry Number
             </label>
@@ -135,7 +133,7 @@ const EnquiryForm = () => {
               required
               className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
             />
-          </div>
+          </div> */}
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
