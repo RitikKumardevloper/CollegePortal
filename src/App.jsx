@@ -68,25 +68,159 @@ export default function App() {
           </MainLayout>
         }
       />
-      <Route path="/students/allstudents" element={<MainLayout><AllStudents /></MainLayout>} />
-      <Route path="/students/addstudent" element={<MainLayout><Addstudent /></MainLayout>} />
-      <Route path="/enquiry/enquiryform" element={<MainLayout><EnquiryForm /></MainLayout>} />
-      <Route path="/enquiry/allenquiry" element={<MainLayout><EnquiriesList /></MainLayout>} />
-      <Route path="/enquiries/:enquiryNo" element={<MainLayout><EnquiryDetail /></MainLayout>} />
-      <Route path="/courses/allcourses" element={<MainLayout><Courses /></MainLayout>} />
-      <Route path="/faculty" element={<MainLayout><Faculty /></MainLayout>} />
-      <Route path="/courses" element={<MainLayout><Courses /></MainLayout>} />
-      <Route path="/attendance" element={<MainLayout><Attendance /></MainLayout>} />
-      <Route path="/settings" element={<MainLayout><Settings /></MainLayout>} />
-      <Route path="/admin/manage-location" element={<MainLayout><ManageLocation /></MainLayout>} />
-      <Route path="/admin/manage-admin" element={<MainLayout><ManageAdmin /></MainLayout>} />
-      <Route path="/admin/manage-teacher" element={<MainLayout><ManageTeacher /></MainLayout>} />
-      <Route path="/report/enquiry" element={<MainLayout><Enquiry /></MainLayout>} />
-      <Route path="/report/admission" element={<MainLayout><Admission /></MainLayout>} />
-      <Route path="/report/collection" element={<MainLayout><Collection /></MainLayout>} />
-      <Route path="/report/payment" element={<MainLayout><Payment /></MainLayout>} />
-      <Route path="/report/balance" element={<MainLayout><BalanceFees /></MainLayout>} />
-      <Route path="/report/profit&loss" element={<MainLayout><Profit /></MainLayout>} />
+      <Route
+        path="/students/allstudents"
+        element={
+          <MainLayout>
+            <AllStudents />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/students/addstudent"
+        element={
+          <MainLayout>
+            <Addstudent />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/enquiry/enquiryform"
+        element={
+          <MainLayout>
+            <EnquiryForm />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/enquiry/allenquiry"
+        element={
+          <MainLayout>
+            <EnquiriesList />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/enquiries/:enquiryNo"
+        element={
+          <MainLayout>
+            <EnquiryDetail />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/courses/allcourses"
+        element={
+          <MainLayout>
+            <Courses />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/faculty"
+        element={
+          <MainLayout>
+            <Faculty />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/courses"
+        element={
+          <MainLayout>
+            <Courses />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/attendance"
+        element={
+          <MainLayout>
+            <Attendance />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/settings"
+        element={
+          <MainLayout>
+            <Settings />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/admin/manage-location"
+        element={
+          <MainLayout>
+            <ManageLocation />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/admin/manage-admin"
+        element={
+          <MainLayout>
+            <ManageAdmin />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/admin/manage-teacher"
+        element={
+          <MainLayout>
+            <ManageTeacher />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/report/enquiry"
+        element={
+          <MainLayout>
+            <Enquiry />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/report/admission"
+        element={
+          <MainLayout>
+            <Admission />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/report/collection"
+        element={
+          <MainLayout>
+            <Collection />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/report/payment"
+        element={
+          <MainLayout>
+            <Payment />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/report/balance"
+        element={
+          <MainLayout>
+            <BalanceFees />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/report/profit&loss"
+        element={
+          <MainLayout>
+            <Profit />
+          </MainLayout>
+        }
+      />
     </Routes>
+    // hey there! 👋
   );
 }
