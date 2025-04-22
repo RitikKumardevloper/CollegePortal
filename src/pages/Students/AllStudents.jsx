@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { FiEdit, FiTrash2, FiRefreshCw, FiPlus } from "react-icons/fi";
 import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import OverlayModal from "../../components/OverlayModal";
+import AddStudent from "./AddStudent"; // You can replace this with your form
 
 const AllStudents = () => {
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState("");
+  const [showAddModal, setShowAddModal] = useState(false);
 
   useEffect(() => {
     const mockData = [
@@ -20,7 +22,7 @@ const AllStudents = () => {
         address: "789 Pine Street, Springfield, IL",
         parentMobile: "0987654323",
         completion: "complete",
-        avatar: "https://randomuser.me/api/portraits/men/3.jpg"
+        avatar: "https://randomuser.me/api/portraits/men/3.jpg",
       },
       {
         id: 4,
@@ -33,8 +35,8 @@ const AllStudents = () => {
         address: "321 Oak Avenue, Denver, CO",
         parentMobile: "0987654324",
         completion: "incomplete",
-        avatar: "https://randomuser.me/api/portraits/women/4.jpg"
-      }
+        avatar: "https://randomuser.me/api/portraits/women/4.jpg",
+      },
     ];
     setStudents(mockData);
   }, []);
@@ -45,13 +47,16 @@ const AllStudents = () => {
 
   return (
     <div className="p-4 sm:p-6">
-      
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">All Students</h2>
         <div className="flex items-center gap-2">
-          <button className="p-2 bg-green-500 text-white rounded hover:bg-green-600">
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="p-2 bg-green-500 text-white rounded hover:bg-green-600"
+          >
             <FiPlus />
           </button>
+
           <button className="p-2 bg-gray-300 rounded hover:bg-gray-400">
             <FiRefreshCw />
           </button>
@@ -138,6 +143,11 @@ const AllStudents = () => {
           </div>
         ))
       )}
+
+      {/* Add Modal */}
+      <OverlayModal isOpen={showAddModal} onClose={() => setShowAddModal(false)}>
+        <AddStudent closeModal={() => setShowAddModal(false)} />
+      </OverlayModal>
     </div>
   );
 };

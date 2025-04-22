@@ -1,7 +1,7 @@
-
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 const Addstudent = () => {
   const [formData, setFormData] = useState({
@@ -26,8 +26,10 @@ const Addstudent = () => {
 
   const [submitted, setSubmitted] = useState(false);
   const navigate = useNavigate();
-
   const itemsList = ["book", "pencil", "kacha", "ghadu"];
+
+  const inputClass =
+    "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -43,15 +45,80 @@ const Addstudent = () => {
     }
   };
 
+  const resetForm = () => {
+    setFormData({
+      enrollmentNo: "",
+      enrollmentDate: "",
+      studentName: "",
+      fatherName: "",
+      motherName: "",
+      dob: "",
+      occupation: "",
+      gender: "",
+      presentAddress: "",
+      permanentAddress: "",
+      contactNo: "",
+      category: "",
+      religion: "",
+      course: "",
+      discount: "",
+      remark: "",
+      items: [],
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const requiredFields = {
+      enrollmentNo: "Enrollment Number",
+      enrollmentDate: "Enrollment Date",
+      studentName: "Student Name",
+      fatherName: "Father's Name",
+      motherName: "Mother's Name",
+      dob: "Date of Birth",
+      occupation: "Occupation",
+      gender: "Gender",
+      presentAddress: "Present Address",
+      permanentAddress: "Permanent Address",
+      contactNo: "Contact Number",
+      category: "Category",
+      religion: "Religion",
+      course: "Course",
+    };
+
+    for (const [key, label] of Object.entries(requiredFields)) {
+      if (!formData[key]) {
+        toast.error(`${label} is required`);
+        return; // 🛑 stop on first missing field
+      }
+    }
+
     try {
-      await axios.post("http://localhost:5000/api/student", formData);
+      await axios.post("http://localhost:5000//admin/students", formData);
+      toast.success("Student added successfully!");
       setSubmitted(true);
+      resetForm();
     } catch (err) {
-      alert("Failed to submit");
+      toast.error("Submission failed");
     }
   };
+
+  const [items, setItems] = useState([]);
+
+  useEffect(() => {
+    // Fetch items from the backend
+    const fetchItems = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/admin/items");
+        setItems(response.data);
+      } catch (error) {
+        console.error("Error fetching items:", error);
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   return (
     <div className="max-w-6xl mx-auto bg-white p-6 rounded-md shadow-md">
@@ -85,7 +152,7 @@ const Addstudent = () => {
               name="enrollmentNo"
               value={formData.enrollmentNo}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Enrollment Date</label>
@@ -94,7 +161,7 @@ const Addstudent = () => {
               name="enrollmentDate"
               value={formData.enrollmentDate}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Student Name</label>
@@ -103,7 +170,7 @@ const Addstudent = () => {
               name="studentName"
               value={formData.studentName}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Father's Name</label>
@@ -112,7 +179,7 @@ const Addstudent = () => {
               name="fatherName"
               value={formData.fatherName}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Mother's Name</label>
@@ -121,7 +188,7 @@ const Addstudent = () => {
               name="motherName"
               value={formData.motherName}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Date of Birth</label>
@@ -130,7 +197,7 @@ const Addstudent = () => {
               name="dob"
               value={formData.dob}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Occupation</label>
@@ -139,7 +206,7 @@ const Addstudent = () => {
               name="occupation"
               value={formData.occupation}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Gender</label>
@@ -147,7 +214,7 @@ const Addstudent = () => {
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             >
               <option value="">Select Gender</option>
               <option value="Male">Male</option>
@@ -162,7 +229,7 @@ const Addstudent = () => {
               name="presentAddress"
               value={formData.presentAddress}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             ></textarea>
 
             <label>Permanent Address</label>
@@ -170,7 +237,7 @@ const Addstudent = () => {
               name="permanentAddress"
               value={formData.permanentAddress}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             ></textarea>
 
             <label>Contact No</label>
@@ -179,7 +246,7 @@ const Addstudent = () => {
               name="contactNo"
               value={formData.contactNo}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Category</label>
@@ -187,7 +254,7 @@ const Addstudent = () => {
               name="category"
               value={formData.category}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             >
               <option value="">Select Category</option>
               <option value="GEN">General</option>
@@ -200,7 +267,7 @@ const Addstudent = () => {
               name="religion"
               value={formData.religion}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             >
               <option value="">Select Religion</option>
               <option value="Hindu">Hindu</option>
@@ -213,7 +280,7 @@ const Addstudent = () => {
               name="course"
               value={formData.course}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             >
               <option value="">Select Class</option>
               <option value="MCA">MCA</option>
@@ -229,7 +296,7 @@ const Addstudent = () => {
               name="discount"
               value={formData.discount}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             />
 
             <label>Remark</label>
@@ -237,22 +304,26 @@ const Addstudent = () => {
               name="remark"
               value={formData.remark}
               onChange={handleChange}
-              className="input"
+              className={inputClass}
             ></textarea>
 
             <label className="block mt-4">Items</label>
-            {itemsList.map((item) => (
-              <div key={item} className="flex items-center space-x-2">
-                <input
-                  type="checkbox"
-                  name="items"
-                  value={item}
-                  checked={formData.items.includes(item)}
-                  onChange={handleChange}
-                />
-                <span>{item}</span>
-              </div>
-            ))}
+            {items.length === 0 ? (
+              <p className="text-red-500 mt-2">Item not available</p>
+            ) : (
+              items.map((itemObj) => (
+                <div key={itemObj.item} className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    name="items"
+                    value={itemObj.item}
+                    checked={formData.items.includes(itemObj.item)}
+                    onChange={handleChange}
+                  />
+                  <span>{itemObj.item}</span>
+                </div>
+              ))
+            )}
           </div>
 
           <div className="md:col-span-3 text-right mt-4">
@@ -267,6 +338,6 @@ const Addstudent = () => {
       )}
     </div>
   );
-}
+};
 
-export default Addstudent
+export default Addstudent;
