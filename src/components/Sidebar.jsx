@@ -65,6 +65,7 @@ export default function Sidebar() {
       children: [
         { to: "/courses/allcourses", label: "All course" },
         { to: "/courses/addcourses", label: "Add Courses" },
+        // { to: "/courses/addcourses", label: "Add Courses" },
         // { to: "/courses/editcourses", label: "Add fees" },
         // { to: "/courses/aboutcourses", label: "About Courses" },
       ],

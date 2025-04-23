@@ -14,7 +14,7 @@ import AllStudents from "../src/pages/Students/AllStudents";
 import EnquiryForm from "./pages/Enquiry/EnquiryForm";
 import EnquiriesList from "./pages/Enquiry/EnquiriesList";
 import EnquiryDetail from "./pages/Enquiry/EnquiryDetail";
-import Addstudent from "./pages/Students/Addstudent";
+import AddStudent from "./pages/Students/Addstudent.jsx";
 import Enquiry from "./pages/Report/Enquiry";
 import Collection from "./pages/Report/Collection";
 import BalanceFees from "./pages/Report/BalanceFees";
@@ -24,13 +24,16 @@ import Payment from "./pages/Report/Payment";
 import ManageAdmin from "./pages/Admin/ManageAdmin";
 import ManageLocation from "./pages/Admin/ManageLocation";
 import ManageTeacher from "./pages/Admin/ManageTeacher";
+import AddCourses from "./pages/Courses/AddCourses";
 
 const MainLayout = ({ children }) => (
   <div className="flex bg-gray-50">
     <Sidebar />
     <div className="flex-1 flex flex-col overflow-hidden">
       <TopNav />
-      <main className="flex-1 overflow-y-auto p-6 space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900">{children}</main>
+      <main className="flex-1 overflow-y-auto p-6 space-y-6 text-gray-800 dark:text-gray-100 dark:bg-gray-900">
+        {children}
+      </main>
     </div>
   </div>
 );
@@ -57,7 +60,7 @@ export default function App() {
   // Save dark mode preference to localStorage
   const handleDarkModeToggle = () => {
     const newDarkMode = !darkMode;
-    setDarkMode(newDarkMode); 
+    setDarkMode(newDarkMode);
     localStorage.setItem("darkMode", newDarkMode);
   };
 
@@ -93,7 +96,7 @@ export default function App() {
         path="/students/addstudent"
         element={
           <MainLayout>
-            <Addstudent
+            <AddStudent
               darkMode={darkMode}
               toggleDarkMode={handleDarkModeToggle}
             />
@@ -138,6 +141,17 @@ export default function App() {
         element={
           <MainLayout>
             <Courses
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/courses/addCourses"
+        element={
+          <MainLayout>
+            <AddCourses
               darkMode={darkMode}
               toggleDarkMode={handleDarkModeToggle}
             />

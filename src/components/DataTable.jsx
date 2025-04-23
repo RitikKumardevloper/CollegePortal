@@ -1,4 +1,7 @@
-export const DataTable = ({ columns, data }) => {
+export const DataTable = ({ columns = [], data = [] }) => {
+  // console.log("Is data an array?", Array.isArray(data)); // Should be true
+  // console.log("Data:", data); // Check what you're actually passing
+
   return (
     <div className="overflow-x-auto bg-white rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
@@ -15,18 +18,26 @@ export const DataTable = ({ columns, data }) => {
           </tr>
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
-          {data.map((row, rowIndex) => (
-            <tr key={rowIndex}>
-              {columns.map((column) => (
-                <td
-                  key={`${rowIndex}-${column.key}`}
-                  className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
-                >
-                  {row[column.key]}
-                </td>
-              ))}
+          {Array.isArray(data) ? (
+            data.map((row, rowIndex) => (
+              <tr key={rowIndex}>
+                {columns.map((column) => (
+                  <td
+                    key={`${rowIndex}-${column.key}`}
+                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                  >
+                    {row[column.key]}
+                  </td>
+                ))}
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan={columns.length} className="text-center text-red-500 py-4">
+                Invalid data format
+              </td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
     </div>
