@@ -1,9 +1,6 @@
 export const DataTable = ({ columns = [], data = [] }) => {
-  // console.log("Is data an array?", Array.isArray(data)); // Should be true
-  // console.log("Data:", data); // Check what you're actually passing
-
   return (
-    <div className="overflow-x-auto bg-white rounded-lg shadow">
+    <div className=" overflow-x-auto bg-white rounded-lg shadow">
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-50">
           <tr>
@@ -26,7 +23,7 @@ export const DataTable = ({ columns = [], data = [] }) => {
                     key={`${rowIndex}-${column.key}`}
                     className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                   >
-                    {row[column.key]}
+                    {column.render ? column.render(row) : row[column.key]}
                   </td>
                 ))}
               </tr>

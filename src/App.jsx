@@ -25,6 +25,7 @@ import ManageAdmin from "./pages/Admin/ManageAdmin";
 import ManageLocation from "./pages/Admin/ManageLocation";
 import ManageTeacher from "./pages/Admin/ManageTeacher";
 import AddCourses from "./pages/Courses/AddCourses";
+import EditCourse from "./pages/Courses/EditCourse.jsx";
 
 const MainLayout = ({ children }) => (
   <div className="flex bg-gray-50">
@@ -152,6 +153,17 @@ export default function App() {
         element={
           <MainLayout>
             <AddCourses
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/courses/edit-course/:id"
+        element={
+          <MainLayout>
+            <EditCourse
               darkMode={darkMode}
               toggleDarkMode={handleDarkModeToggle}
             />
