@@ -1,39 +1,40 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import toast, { Toaster } from "react-hot-toast";
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import toast, { Toaster } from 'react-hot-toast';
+import { loadStripe } from '@stripe/stripe-js';
 
-const Addstudent = () => {
+const stripePromise = loadStripe('pk_test_51RJWDYSGzMNdL60zAGTf0JEiGDwmvHgInqaFmUDCOU9TVaCANHPYx80Ivf0GzOt2SvHxpQF5b23rIcpRGApgWhqE00IQ2ns4wU'); // Use your Stripe public key
+
+const AddStudent = () => {
   const [formData, setFormData] = useState({
-    enrollmentNo: "",
-    enrollmentDate: "",
-    studentName: "",
-    fatherName: "",
-    motherName: "",
-    dob: "",
-    occupation: "",
-    gender: "",
-    presentAddress: "",
-    permanentAddress: "",
-    contactNo: "",
-    category: "",
-    religion: "",
-    course: "",
-    discount: "",
-    remark: "",
+    studentName: '',
+    fatherName: '',
+    motherName: '',
+    dob: '',
+    occupation: '',
+    gender: '',
+    presentAddress: '',
+    permanentAddress: '',
+    contactNo: '',
+    category: '',
+    religion: '',
+    course: '',
+    remark: '',
     items: [],
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [items, setItems] = useState([]);
+  const [courses, setCourses] = useState([]);
   const navigate = useNavigate();
-  const itemsList = ["book", "pencil", "kacha", "ghadu"];
 
   const inputClass =
-    "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500";
+    'w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500';
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    if (type === "checkbox") {
+    if (type === 'checkbox') {
       setFormData((prev) => ({
         ...prev,
         items: checked
@@ -47,22 +48,19 @@ const Addstudent = () => {
 
   const resetForm = () => {
     setFormData({
-      enrollmentNo: "",
-      enrollmentDate: "",
-      studentName: "",
-      fatherName: "",
-      motherName: "",
-      dob: "",
-      occupation: "",
-      gender: "",
-      presentAddress: "",
-      permanentAddress: "",
-      contactNo: "",
-      category: "",
-      religion: "",
-      course: "",
-      discount: "",
-      remark: "",
+      studentName: '',
+      fatherName: '',
+      motherName: '',
+      dob: '',
+      occupation: '',
+      gender: '',
+      presentAddress: '',
+      permanentAddress: '',
+      contactNo: '',
+      category: '',
+      religion: '',
+      course: '',
+      remark: '',
       items: [],
     });
   };
@@ -71,100 +69,105 @@ const Addstudent = () => {
     e.preventDefault();
 
     const requiredFields = {
-      enrollmentNo: "Enrollment Number",
-      enrollmentDate: "Enrollment Date",
-      studentName: "Student Name",
+      studentName: 'Student Name',
       fatherName: "Father's Name",
       motherName: "Mother's Name",
-      dob: "Date of Birth",
-      occupation: "Occupation",
-      gender: "Gender",
-      presentAddress: "Present Address",
-      permanentAddress: "Permanent Address",
-      contactNo: "Contact Number",
-      category: "Category",
-      religion: "Religion",
-      course: "Course",
+      dob: 'Date of Birth',
+      occupation: 'Occupation',
+      gender: 'Gender',
+      presentAddress: 'Present Address',
+      permanentAddress: 'Permanent Address',
+      contactNo: 'Contact Number',
+      category: 'Category',
+      religion: 'Religion',
+      course: 'Course',
     };
 
     for (const [key, label] of Object.entries(requiredFields)) {
       if (!formData[key]) {
         toast.error(`${label} is required`);
-        return; // 🛑 stop on first missing field
+        return;
       }
     }
 
     try {
-      await axios.post("http://localhost:5000//admin/students", formData);
-      toast.success("Student added successfully!");
+      // Call backend API to add student
+      await axios.post('http://localhost:5000/admin/students', formData);
+      toast.success('Student added successfully!');
       setSubmitted(true);
       resetForm();
     } catch (err) {
-      toast.error("Submission failed");
+      toast.error('Submission failed');
+      console.error(err);
     }
   };
 
-  const [items, setItems] = useState([]);
+  const handleStripePayment = async () => {
+    try {
+      // Call backend to create Stripe checkout session
+      const response = await axios.post('http://localhost:5000/api/payment/create-checkout-session', {
+        studentId: formData.studentId, // Pass student ID for success redirect
+      });
+
+      const { id } = response.data;
+
+      // Redirect to Stripe Checkout
+      const stripe = await stripePromise;
+      const result = await stripe.redirectToCheckout({
+        sessionId: id,
+      });
+
+      if (result.error) {
+        toast.error('Payment failed');
+      }
+    } catch (error) {
+      toast.error('Error processing payment');
+      console.error('Payment Error: ', error);
+    }
+  };
 
   useEffect(() => {
-    // Fetch items from the backend
     const fetchItems = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/admin/items");
-        setItems(response.data);
+        const res = await axios.get('http://localhost:5000/admin/items');
+        setItems(res.data);
       } catch (error) {
-        console.error("Error fetching items:", error);
+        console.error('Error fetching items:', error);
+      }
+    };
+
+    const fetchCourses = async () => {
+      try {
+        const res = await axios.get('http://localhost:5000/admin/courses');
+        setCourses(res.data);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
       }
     };
 
     fetchItems();
+    fetchCourses();
   }, []);
 
   return (
     <div className="max-w-6xl mx-auto bg-white p-6 rounded-md shadow-md">
+      <Toaster />
       <h2 className="text-2xl font-bold mb-4">Student Admission Form</h2>
 
       {submitted ? (
         <div className="space-x-4 mt-4">
           <button
-            onClick={() => navigate("/students")}
+            onClick={() => navigate('/students')}
             className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
           >
-            View Student
-          </button>
-          <button
-            onClick={() => navigate("/students/edit")}
-            className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
-          >
-            Edit
+            View Students
           </button>
         </div>
       ) : (
-        <form
-          onSubmit={handleSubmit}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4"
-        >
-          {/* Left Column */}
-          <div>
-            <label>Enrollment No</label>
-            <input
-              type="text"
-              name="enrollmentNo"
-              value={formData.enrollmentNo}
-              onChange={handleChange}
-              className={inputClass}
-            />
-
-            <label>Enrollment Date</label>
-            <input
-              type="date"
-              name="enrollmentDate"
-              value={formData.enrollmentDate}
-              onChange={handleChange}
-              className={inputClass}
-            />
-
-            <label>Student Name</label>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Student Name */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Student Name</label>
             <input
               type="text"
               name="studentName"
@@ -172,8 +175,11 @@ const Addstudent = () => {
               onChange={handleChange}
               className={inputClass}
             />
+          </div>
 
-            <label>Father's Name</label>
+          {/* Father's Name */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Father's Name</label>
             <input
               type="text"
               name="fatherName"
@@ -181,8 +187,11 @@ const Addstudent = () => {
               onChange={handleChange}
               className={inputClass}
             />
+          </div>
 
-            <label>Mother's Name</label>
+          {/* Mother's Name */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Mother's Name</label>
             <input
               type="text"
               name="motherName"
@@ -190,8 +199,11 @@ const Addstudent = () => {
               onChange={handleChange}
               className={inputClass}
             />
+          </div>
 
-            <label>Date of Birth</label>
+          {/* Date of Birth */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Date of Birth</label>
             <input
               type="date"
               name="dob"
@@ -199,8 +211,11 @@ const Addstudent = () => {
               onChange={handleChange}
               className={inputClass}
             />
+          </div>
 
-            <label>Occupation</label>
+          {/* Occupation */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Occupation</label>
             <input
               type="text"
               name="occupation"
@@ -208,8 +223,11 @@ const Addstudent = () => {
               onChange={handleChange}
               className={inputClass}
             />
+          </div>
 
-            <label>Gender</label>
+          {/* Gender */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Gender</label>
             <select
               name="gender"
               value={formData.gender}
@@ -222,25 +240,33 @@ const Addstudent = () => {
             </select>
           </div>
 
-          {/* Middle Column */}
-          <div>
-            <label>Present Address</label>
-            <textarea
+          {/* Present Address */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Present Address</label>
+            <input
+              type="text"
               name="presentAddress"
               value={formData.presentAddress}
               onChange={handleChange}
               className={inputClass}
-            ></textarea>
+            />
+          </div>
 
-            <label>Permanent Address</label>
-            <textarea
+          {/* Permanent Address */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Permanent Address</label>
+            <input
+              type="text"
               name="permanentAddress"
               value={formData.permanentAddress}
               onChange={handleChange}
               className={inputClass}
-            ></textarea>
+            />
+          </div>
 
-            <label>Contact No</label>
+          {/* Contact Number */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Contact Number</label>
             <input
               type="text"
               name="contactNo"
@@ -248,90 +274,69 @@ const Addstudent = () => {
               onChange={handleChange}
               className={inputClass}
             />
+          </div>
 
-            <label>Category</label>
-            <select
+          {/* Category */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Category</label>
+            <input
+              type="text"
               name="category"
               value={formData.category}
               onChange={handleChange}
               className={inputClass}
-            >
-              <option value="">Select Category</option>
-              <option value="GEN">General</option>
-              <option value="OBC">OBC</option>
-              <option value="SC">SC</option>
-            </select>
+            />
+          </div>
 
-            <label>Religion</label>
-            <select
+          {/* Religion */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Religion</label>
+            <input
+              type="text"
               name="religion"
               value={formData.religion}
               onChange={handleChange}
               className={inputClass}
-            >
-              <option value="">Select Religion</option>
-              <option value="Hindu">Hindu</option>
-              <option value="Muslim">Muslim</option>
-              <option value="Christian">Christian</option>
-            </select>
+            />
+          </div>
 
-            <label>Course</label>
+          {/* Course */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Course</label>
             <select
               name="course"
               value={formData.course}
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="">Select Class</option>
-              <option value="MCA">MCA</option>
-              <option value="BCA">BCA</option>
+              <option value="">Select Course</option>
+              {courses.map((course) => (
+                <option key={course._id} value={course.name}>
+                  {course.name}
+                </option>
+              ))}
             </select>
           </div>
 
-          {/* Right Column */}
-          <div>
-            <label>Discount</label>
-            <input
-              type="text"
-              name="discount"
-              value={formData.discount}
-              onChange={handleChange}
-              className={inputClass}
-            />
-
-            <label>Remark</label>
+          {/* Remark */}
+          <div className="md:col-span-3">
+            <label className="block text-sm font-medium text-gray-700">Remark</label>
             <textarea
               name="remark"
               value={formData.remark}
               onChange={handleChange}
               className={inputClass}
-            ></textarea>
-
-            <label className="block mt-4">Items</label>
-            {items.length === 0 ? (
-              <p className="text-red-500 mt-2">Item not available</p>
-            ) : (
-              items.map((itemObj) => (
-                <div key={itemObj.item} className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    name="items"
-                    value={itemObj.item}
-                    checked={formData.items.includes(itemObj.item)}
-                    onChange={handleChange}
-                  />
-                  <span>{itemObj.item}</span>
-                </div>
-              ))
-            )}
+            />
           </div>
 
+          {/* Payment Button */}
           <div className="md:col-span-3 text-right mt-4">
             <button
-              type="submit"
+              type="button"
+              onClick={handleStripePayment}
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
             >
-              Submit
+              Submit and Pay
             </button>
           </div>
         </form>
@@ -340,4 +345,4 @@ const Addstudent = () => {
   );
 };
 
-export default Addstudent;
+export default AddStudent;
