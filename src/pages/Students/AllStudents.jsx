@@ -1,10 +1,7 @@
-import { useState, useEffect } from "react";
-import { FiEdit, FiTrash2, FiRefreshCw, FiPlus } from "react-icons/fi";
-import { FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
-import OverlayModal from "../../components/OverlayModal";
-import AddStudent from "./Addstudent"; // You can replace this with your form
-import breadcrumbs from "../../components/Breadcrumbs";
-import Breadcrumbs from "../../components/Breadcrumbs";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 const AllStudents = () => {
   const [students, setStudents] = useState([]);
