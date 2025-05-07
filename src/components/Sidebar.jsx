@@ -53,9 +53,9 @@ export default function Sidebar() {
       label: "Teacher",
       children: [
         { to: "/teacher/allteacher", label: "All Teacher" },
-        // { to: "/teacher/editteacher", label: "Edit Teacher" },
         { to: "/teacher/addteacher", label: "Add Teacher" },
-        // { to: "/teacher/aboutteacher", label: "About Teacher" },
+        // { to: "/teacher/addLocation", label: "Add Location" },
+        { to: "/teacher/viewAllTeachers", label: "View all teachers" },
         { to: "/teacher/teachertimetable", label: "Teacher TimeTable" },
       ],
     },

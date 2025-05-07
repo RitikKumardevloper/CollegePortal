@@ -27,6 +27,9 @@ import ManageTeacher from "./pages/Admin/ManageTeacher";
 import AddCourses from "./pages/Courses/AddCourses";
 import EditCourse from "./pages/Courses/EditCourse.jsx";
 import PaymentSuccess from "./pages/Students/PaymentSuccess.jsx";
+import AddLocation from "./pages/Admin/AddLocation.jsx";
+import AddTeacher from "./pages/Teacher/AddTeacher.jsx";
+import ViewAllTeachers from "./pages/ViewAllTeachers.jsx";
 
 const MainLayout = ({ children }) => (
   <div className="flex bg-gray-50">
@@ -206,7 +209,41 @@ export default function App() {
           </MainLayout>
         }
       />
+      {/* {teacher curd} */}
+      <Route
+        path="/teacher/addLocation"
+        element={
+          <MainLayout>
+            <AddLocation
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
+          </MainLayout>
+        }
+      />
       {/* Admin Routes */}
+      <Route
+        path="/teacher/addteacher"
+        element={
+          <MainLayout>
+            <AddTeacher
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
+          </MainLayout>
+        }
+      />
+      <Route
+        path="/teacher/viewallteachers"
+        element={
+          <MainLayout>
+            <ViewAllTeachers
+              darkMode={darkMode}
+              toggleDarkMode={handleDarkModeToggle}
+            />
+          </MainLayout>
+        }
+      />
       <Route
         path="/admin/manage-location"
         element={
